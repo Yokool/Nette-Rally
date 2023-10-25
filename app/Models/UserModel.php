@@ -33,9 +33,33 @@ final class UserModel
 
     public function fetchAllMembers()
     {
-        return $this->databaseExplorer
+        $fetchedMembers = $this->databaseExplorer
             ->table('team_member')
             ->fetchAll();
+
+        return $this->transformMembersToOuputForm($fetchedMembers);
+
+        
+    }
+
+    /**
+     * REWRITE THIS USING SQL
+     */
+    public function transformMembersToOuputForm($fetchedMembers)
+    {
+        $transformedMembers = [];
+        foreach ($fetchedMembers as $fetchedMember) {
+            
+            $position = $fetchedMember
+                ->ref('team_position', 'team_position_fk');
+            
+                $memberArray = $fetchedMember->toArray();
+                $memberArray['team_position_name'] = $position['name'];
+                $transformedMembers[] = $memberArray;   
+        }
+
+        return $transformedMembers;
+
     }
     
 }
