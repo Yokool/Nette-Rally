@@ -2,7 +2,7 @@
 
 {block content}
 
-<h1>Nový člen týmu</h1>
+<h1>Nový člen</h1>
 <form n:name=memberAddForm>
 	<label for="name">Jméno: </label>
 	<input type="text" n:name=first_name placeholder="Jméno" />
@@ -28,5 +28,22 @@
 	
 </form>
 
+<h1>Všichni lidé v Rally:</h1>
+<table>
+	<tr>
+		<th>Jméno</th>
+		<th>Přímení</th>
+		<th>Pozice</th>
+	</tr>
+
+	{foreach $members as $member}
+		<tr>
+			<td>{$member['first_name']}</td>
+			<td>{$member['last_name']}</td>
+			<td>{$member['team_position_fk']}</td>
+		</tr>
+	{/foreach}
+
+</table>
 
 {/block}

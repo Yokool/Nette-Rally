@@ -19,6 +19,12 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 
     }
 
+    public function renderDefault()
+    {
+        $members = $this->memberModel->fetchAllMembers();
+        $this->template->members = $members;
+    }
+
     public function createComponentMemberAddForm(): Form
     {
         $form = new Form;
@@ -37,10 +43,11 @@ final class HomePresenter extends Nette\Application\UI\Presenter
     {
         $this->memberModel->insertNewMember(
             $data['first_name'],
-            $data['last_name']
+            $data['last_name'],
+            $data['team_position']
         );
 
-        $this->redirect("Home:");
+        $this->redirectPermanent("Home:");
     }
 
 }

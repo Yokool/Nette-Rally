@@ -18,7 +18,8 @@ final class UserModel
 
     public function insertNewMember(
         $first_name,
-        $last_name
+        $last_name,
+        $team_positon_key
         )
     {
         $this->databaseExplorer
@@ -26,7 +27,15 @@ final class UserModel
             ->insert([
                 'first_name' => $first_name,
                 'last_name' => $last_name,
+                'team_position_fk' => $team_positon_key,
             ]);
+    }
+
+    public function fetchAllMembers()
+    {
+        return $this->databaseExplorer
+            ->table('team_member')
+            ->fetchAll();
     }
     
 }
