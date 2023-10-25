@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Nette;
-use Nette\Application\UI\Form;
 
 
 final class UserModel
