@@ -31,8 +31,11 @@ final class HomePresenter extends Nette\Application\UI\Presenter
     public function memberAddFormSucceeded(Form $form, $data)
     {
         $this->memberModel->insertNewMember(
-            $data['name']
+            $data['first_name'],
+            $data['last_name']
         );
+
+        $this->redirect("Home:");
     }
 
 }
