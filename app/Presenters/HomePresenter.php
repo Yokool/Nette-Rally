@@ -8,6 +8,7 @@ use Nette;
 use Nette\Application\UI\Form;
 use App\Models\UserModel;
 use App\Models\TeamPositionModel;
+use App\Models\TeamModel;
 
 final class HomePresenter extends Nette\Application\UI\Presenter
 {
@@ -17,7 +18,8 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 
     public function __construct(
         private UserModel $memberModel,
-        private TeamPositionModel $teamPositionModel
+        private TeamPositionModel $teamPositionModel,
+        private TeamModel $teamModel
     ) {
 
         // Add all possible positions into the form
@@ -153,10 +155,10 @@ final class HomePresenter extends Nette\Application\UI\Presenter
         $collectedMemberIDs,
         )
     {
-        bdump($collectedMemberIDs);
         // For all the positions we have
         // we should now assign every member
         //
+        $this->teamModel->createTeamWithMembers($team_name, $collectedMemberIDs);
         $this->redirectPermanent("Home:");
     }
 
