@@ -44,8 +44,8 @@ final class HomePresenter extends Nette\Application\UI\Presenter
     public function createComponentMemberAddForm(): Form
     {
         $form = new Form;
-        $form->addText('first_name')->setRequired('Please fill in your first name.');
-        $form->addText('last_name')->setRequired('Please fill in your last name.');
+        $form->addText('first_name')->setRequired('Prosím vyplňte křestní jméno.');
+        $form->addText('last_name')->setRequired('Prosím vyplňte příjmení.');
         
         $positionNames = $this->teamPositionModel->fetchAllPositionsAsIdNamePairs();
         $form->addSelect('team_position', 'Pozice', $positionNames);
