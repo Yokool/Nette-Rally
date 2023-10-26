@@ -45,5 +45,26 @@ final class TeamModel
         return $this->databaseExplorer->table('team')
             ->fetchAll();
     }
+
+    public function fetchAllTeamsWithMembers() {
+        $allTeams = $this->fetchAllTeams();
+        
+        $transformedTeams = [];
+        // Go through all teams
+        foreach ($allTeams as $team)
+        {
+            $teamArray = $team->toArray();
+            $teamArray['members'] = [];
+            // Get to the decomp.
+            foreach ($team->related('team_member') as $teamMember)
+            {
+                $teamArray['members'][] = $teamMember->toArray();
+            }    
+
+            $transformedTeams[] = $teamArray;
+        }
+
+        return $transformedTeams;
+    }
     
 }

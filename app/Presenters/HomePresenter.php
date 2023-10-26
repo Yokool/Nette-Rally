@@ -32,11 +32,13 @@ final class HomePresenter extends Nette\Application\UI\Presenter
     {
         $members = $this->memberModel->fetchAllMembers();
         $positions = $this->teamPositionModel->fetchAllPositions();
-        $teams = $this->teamModel->fetchAllTeams();
+        $teamsWithMembers = $this->teamModel->fetchAllTeamsWithMembers();
+
 
         $this->template->members = $members;
         $this->template->positions = $positions;
-        $this->template->teams = $teams;
+        $this->template->teams = $teamsWithMembers;
+
     }
 
     public function createComponentMemberAddForm(): Form
