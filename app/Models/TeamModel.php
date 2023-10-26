@@ -26,10 +26,12 @@ final class TeamModel
         
         $createdTeamID = $createdTeam['id'];
         
+        /*
         foreach ($memberIDList as $memberID)
         {
             $this->userModel->assignMemberToTeam($memberID, $createdTeamID);
         }
+        */
     }
     
 }
