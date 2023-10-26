@@ -40,5 +40,10 @@ final class TeamModel
             ]);
         }
     }
+
+    public function fetchAllTeams() {
+        return $this->databaseExplorer->table('team')
+            ->fetchAll();
+    }
     
 }

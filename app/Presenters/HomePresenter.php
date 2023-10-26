@@ -32,9 +32,11 @@ final class HomePresenter extends Nette\Application\UI\Presenter
     {
         $members = $this->memberModel->fetchAllMembers();
         $positions = $this->teamPositionModel->fetchAllPositions();
+        $teams = $this->teamModel->fetchAllTeams();
 
         $this->template->members = $members;
         $this->template->positions = $positions;
+        $this->template->teams = $teams;
     }
 
     public function createComponentMemberAddForm(): Form
@@ -157,7 +159,8 @@ final class HomePresenter extends Nette\Application\UI\Presenter
     {
         // For all the positions we have
         // we should now assign every member
-        //
+        
+        $this->flashMessage("Tým úspěšně vytvořen.");
         $this->teamModel->createTeamWithMembers($team_name, $collectedMemberIDs);
         $this->redirectPermanent("Home:");
     }

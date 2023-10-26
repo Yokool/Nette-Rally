@@ -67,4 +67,21 @@
 	
 </form>
 
+<h1>Všechny týmy</h1>
+<table>
+	<tr>
+		<th>| Jméno týmu |</th>
+		{foreach $positions as $position}
+		<th>| {$position['name']} |</th>
+		{/foreach}
+		
+	</tr>
+
+	{foreach $teams as $team}
+		<tr>
+			<td>{$team['name']}</td>
+		</tr>
+	{/foreach}
+</table>
+
 {/block}
