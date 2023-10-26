@@ -16,6 +16,13 @@ final class UserModel
         
     }
 
+    public function fetchAllMembersByPosition($position_name)
+    {
+        return $this->databaseExplorer->table('team_member')
+            ->where('team_position.name', $position_name)
+            ->fetchAll();
+    }
+
     public function insertNewMember(
         $first_name,
         $last_name,
