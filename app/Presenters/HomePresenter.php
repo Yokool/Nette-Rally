@@ -86,21 +86,30 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 
     public function teamAddFormSucceeded(Form $form, $data)
     {
+        // Prepare all the positions with a counter
+        $positionCounterArray = $this->teamPositionModel->fetchAllPositionByMinMaxArray();
 
         $team_name = $data['team_name'];
         
         // iterate over all positions and their data
         foreach ($this->allPositions as $position) {
-            $position_id = position->id;
+            $position_id = $position->id;
             $key = self::POSITION_FORM_PREFIX . $position_id;
             
             // Get the IDs of all members that were
             // assigned to this position.
             $memberIdArray = $data[$key];
 
-            // TODO: PERFORM SOME VALIDATION SO THAT
-            // WE TRACK ALL THE POSITIONS
+            $positionCounter = $positionCounterArray[$position_id];
+
+            // Add another member
+            $positionCounter['counter'] += 1;
+
         }
+
+        $areValid = TeamPositionModel::arePositionCountersAllValid($positionCounterArray);
+        
+        // Perform validation of the counters
 
         $this->redirectPermanent("Home:");
     }
