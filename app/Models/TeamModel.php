@@ -55,14 +55,18 @@ final class TeamModel
         {
             $teamArray = $team->toArray();
             $teamArray['members'] = [];
-            // Get to the decomp.
+            // Get the team member
             foreach ($team->related('team_member') as $teamMember)
             {
-                $teamArray['members'][] = $teamMember->toArray();
+                
+                $memberPosition = $teamMember->ref('team_position', 'id')['name'];
+                $teamArray['members'][$memberPosition][] = $teamMember->toArray();
             }    
 
             $transformedTeams[] = $teamArray;
         }
+
+        bdump($transformedTeams);
 
         return $transformedTeams;
     }
