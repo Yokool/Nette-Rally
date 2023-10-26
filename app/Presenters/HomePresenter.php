@@ -91,6 +91,11 @@ final class HomePresenter extends Nette\Application\UI\Presenter
         // made up of.
         // index by id's from the DB
         $positionCounterArray = $this->teamPositionModel->fetchAllPositionByMinMaxArray();
+        
+        // We also start transforming the $data
+        // structure to collect all the members
+        // into a list.
+        $collectedMemberIDs = [];
 
         // Team name
         $team_name = $data['team_name'];
@@ -116,6 +121,7 @@ final class HomePresenter extends Nette\Application\UI\Presenter
             {                
                 // Add another member
                 $positionCounter['memberCounter'] += 1;
+                $collectedMemberIDs[] = $memberId;
             }
 
 
@@ -124,9 +130,12 @@ final class HomePresenter extends Nette\Application\UI\Presenter
         $areValid = TeamPositionModel::arePositionCountersAllValid($positionCounterArray);
 
         // Complete validation succeess
-        if($areValid['validationResult'])
+        if(true || $areValid['validationResult'])
         {
-            $this->redirectPermanent("Home:");
+            $this->onTeamFormValidationSuccess(
+                $team_name,
+                $collectedMemberIDs,
+            );
             return;
         }
 
@@ -137,6 +146,18 @@ final class HomePresenter extends Nette\Application\UI\Presenter
             $this->flashMessage($validationErrorMessage);
         }
 
+    }
+
+    public function onTeamFormValidationSuccess(
+        $team_name,
+        $collectedMemberIDs,
+        )
+    {
+        bdump($collectedMemberIDs);
+        // For all the positions we have
+        // we should now assign every member
+        //
+        $this->redirectPermanent("Home:");
     }
 
     
