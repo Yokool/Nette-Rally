@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Počítač: 127.0.0.1
--- Vytvořeno: Stř 25. říj 2023, 20:06
+-- Vytvořeno: Čtv 26. říj 2023, 16:18
 -- Verze serveru: 10.4.28-MariaDB
 -- Verze PHP: 8.0.28
 
@@ -44,17 +44,20 @@ CREATE TABLE `team_member` (
   `id` int(11) NOT NULL,
   `first_name` varchar(256) NOT NULL,
   `last_name` varchar(256) NOT NULL,
-  `team_position_fk` int(11) NOT NULL,
-  `team_fk` int(11) DEFAULT NULL
+  `team_position_fk` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
+-- --------------------------------------------------------
+
 --
--- Vypisuji data pro tabulku `team_member`
+-- Struktura tabulky `team_member__team`
 --
 
-INSERT INTO `team_member` (`id`, `first_name`, `last_name`, `team_position_fk`, `team_fk`) VALUES
-(8, 'John', 'Mayer', 1, NULL),
-(9, 'Mr.', 'Ivan', 3, NULL);
+CREATE TABLE `team_member__team` (
+  `id` int(11) NOT NULL,
+  `team_member_fk` int(11) NOT NULL,
+  `team_fk` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 -- --------------------------------------------------------
 
@@ -95,7 +98,14 @@ ALTER TABLE `team`
 --
 ALTER TABLE `team_member`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `team_position_fk` (`team_position_fk`),
+  ADD KEY `team_position_fk` (`team_position_fk`);
+
+--
+-- Indexy pro tabulku `team_member__team`
+--
+ALTER TABLE `team_member__team`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `team_member_fk` (`team_member_fk`),
   ADD KEY `team_fk` (`team_fk`);
 
 --
@@ -112,13 +122,19 @@ ALTER TABLE `team_position`
 -- AUTO_INCREMENT pro tabulku `team`
 --
 ALTER TABLE `team`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pro tabulku `team_member`
 --
 ALTER TABLE `team_member`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT pro tabulku `team_member__team`
+--
+ALTER TABLE `team_member__team`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT pro tabulku `team_position`
@@ -134,8 +150,14 @@ ALTER TABLE `team_position`
 -- Omezení pro tabulku `team_member`
 --
 ALTER TABLE `team_member`
-  ADD CONSTRAINT `team_member_ibfk_1` FOREIGN KEY (`team_fk`) REFERENCES `team` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `team_member_ibfk_2` FOREIGN KEY (`team_position_fk`) REFERENCES `team_position` (`id`);
+
+--
+-- Omezení pro tabulku `team_member__team`
+--
+ALTER TABLE `team_member__team`
+  ADD CONSTRAINT `team_member__team_ibfk_1` FOREIGN KEY (`team_fk`) REFERENCES `team` (`id`),
+  ADD CONSTRAINT `team_member__team_ibfk_2` FOREIGN KEY (`team_member_fk`) REFERENCES `team_member` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
