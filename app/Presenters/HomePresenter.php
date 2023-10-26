@@ -83,6 +83,11 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 
     public function teamAddFormSucceeded(Form $form, $data)
     {
+
+        $team_name = $data['team_name'];
+        
+        bdump($data);
+
         $this->redirectPermanent("Home:");
     }
 
