@@ -70,9 +70,9 @@
 <h1>Všechny týmy</h1>
 <table>
 	<tr>
-		<th>| Jméno týmu |</th>
+		<th>Jméno týmu</th>
 		{foreach $positions as $position}
-		<th>| {$position['name']} |</th>
+		<th>{$position['name']}</th>
 		{/foreach}
 		
 	</tr>
@@ -81,6 +81,24 @@
 		<tr>
 			<td>{$team['name']}</td>
 			
+			{foreach  $positions as $position}
+				
+				{var $positionName = $position['name']}
+				{var $teamMemberPositionList = $team['members']}
+
+				{if array_key_exists($positionName, $teamMemberPositionList)}
+					{var $membersByPosition = $teamMemberPositionList[$positionName]}
+					<td>
+						{foreach $membersByPosition as $member}
+							{$member['first_name'] . ' ' . $member['last_name']}
+							<br>
+						{/foreach}
+					</td>
+				{else}
+					<td>---</td>
+				{/if}
+				
+			{/foreach}
 		</tr>
 	{/foreach}
 </table>

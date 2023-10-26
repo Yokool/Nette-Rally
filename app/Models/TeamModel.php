@@ -46,7 +46,21 @@ final class TeamModel
             ->fetchAll();
     }
 
+    public function getDecompositionTableTeamMembers()
+    {
+        return $this->databaseExplorer->table('team_member__team')->fetchAll();
+    }
+
     public function fetchAllTeamsWithMembers() {
+        /*
+        $decompositionTable = $this->getDecompositionTableTeamMembers();
+        bdump($decompositionTable);
+        foreach ($variable as $key => $value) {
+
+        }
+        */
+        
+        
         $allTeams = $this->fetchAllTeams();
         
         $transformedTeams = [];
@@ -56,7 +70,7 @@ final class TeamModel
             $teamArray = $team->toArray();
             $teamArray['members'] = [];
             // Get the decomposition table for all team member
-            foreach ($team->related('team_member__team') as $decompositionTable)
+            foreach ($team->related('team_member__team', 'team_fk') as $decompositionTable)
             {
                 // Get reference for team member
                 $teamMember = $decompositionTable->ref('team_member', 'team_member_fk');
@@ -72,9 +86,8 @@ final class TeamModel
             $transformedTeams[] = $teamArray;
         }
 
-        bdump($transformedTeams);
-
         return $transformedTeams;
+        
     }
     
 }

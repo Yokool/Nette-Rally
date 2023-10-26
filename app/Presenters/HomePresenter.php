@@ -38,7 +38,7 @@ final class HomePresenter extends Nette\Application\UI\Presenter
         $this->template->members = $members;
         $this->template->positions = $positions;
         $this->template->teams = $teamsWithMembers;
-
+        
     }
 
     public function createComponentMemberAddForm(): Form
