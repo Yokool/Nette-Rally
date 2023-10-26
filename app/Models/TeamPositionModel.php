@@ -66,7 +66,7 @@ final class TeamPositionModel
         foreach ($positionsArray as $position) {
             $positionAsArray = $position->toArray();
             $positionAsArray['memberCounter'] = 0;
-            $minMaxArray[] = $positionAsArray;
+            $minMaxArray[$position->id] = $positionAsArray;
         }
 
         return $minMaxArray;
@@ -74,16 +74,27 @@ final class TeamPositionModel
 
     public static function arePositionCountersAllValid($positionCounterArray)
     {
+        $validationResult = true;
+        $validationResultCompleteMessages = [];
         foreach ($positionCounterArray as $positionCounterElement)
         {
-            $isValid = isPositionCounterValid($positionCounterElement);
-            if(!$isValid)
+            $isValidResult = TeamPositionModel::isPositionCounterValid($positionCounterElement);
+            
+            
+            if(!$isValidResult['validationResult'])
             {
-                return false;
+                $validationResult = false;
+                $validationResultCompleteMessages[] = $isValidResult['errorMessage'];
+                continue;
             }
 
-            return true;
         }
+
+        
+        return [
+            'validationResult' => $validationResult,
+            'validationResultCompleteMessages' => $validationResultCompleteMessages,
+        ];
     }
     
     // Checks one of the members of fetchAllPositionByMinMaxArray()
@@ -91,11 +102,17 @@ final class TeamPositionModel
     // given by the database.
     public static function isPositionCounterValid($positionCounterElement)
     {
-        $minAllowed = $positionCounterElement['minAllowed'];
-        $maxAllowed = $positionCounterElement['maxAllowed'];
-        $counter = $positionCounterElement['counter'];
+        $positionName = $positionCounterElement['name'];
+        $minAllowed = $positionCounterElement['min_allowed'];
+        $maxAllowed = $positionCounterElement['max_allowed'];
+        $counter = $positionCounterElement['memberCounter'];
 
-        return ($counter >= $minAllowed) && ($counter <= $maxAllowed);
+        $validationResult = ($counter >= $minAllowed) && ($counter <= $maxAllowed);
+
+        return [
+            'validationResult' => $validationResult,
+            'errorMessage' => "Počet členů v týmu na pozici $positionName by měl být mezi čísly $minAllowed a $maxAllowed. Nyní máte $counter.\n",
+        ];
 
     }
     

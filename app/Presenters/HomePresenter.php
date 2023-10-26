@@ -87,31 +87,56 @@ final class HomePresenter extends Nette\Application\UI\Presenter
     public function teamAddFormSucceeded(Form $form, $data)
     {
         // Prepare all the positions with a counter
+        // to see of what positions the team will be
+        // made up of.
+        // index by id's from the DB
         $positionCounterArray = $this->teamPositionModel->fetchAllPositionByMinMaxArray();
 
+        // Team name
         $team_name = $data['team_name'];
         
-        // iterate over all positions and their data
+        // iterate over all existing positions and their data
         foreach ($this->allPositions as $position) {
             $position_id = $position->id;
-            $key = self::POSITION_FORM_PREFIX . $position_id;
+
+            // create a key to index the data from the form
+            $data_key = self::POSITION_FORM_PREFIX . $position_id;
             
             // Get the IDs of all members that were
             // assigned to this position.
-            $memberIdArray = $data[$key];
+            $memberIdArray = $data[$data_key];
 
-            $positionCounter = $positionCounterArray[$position_id];
+            // Get the reference for counter for the position
+            // we are iterating.
+            $positionCounter = &$positionCounterArray[$position_id];
+            
+            // Take all the members we
+            // want to assign to this job.
+            foreach ($memberIdArray as $memberId)
+            {                
+                // Add another member
+                $positionCounter['memberCounter'] += 1;
+            }
 
-            // Add another member
-            $positionCounter['counter'] += 1;
 
         }
 
         $areValid = TeamPositionModel::arePositionCountersAllValid($positionCounterArray);
-        
-        // Perform validation of the counters
 
-        $this->redirectPermanent("Home:");
+        // Complete validation succeess
+        if($areValid['validationResult'])
+        {
+            $this->redirectPermanent("Home:");
+            return;
+        }
+
+        // Validation failure, print messages
+        $validationErrorMessages = $areValid['validationResultCompleteMessages'];
+
+        foreach ($validationErrorMessages as $validationErrorMessage) {
+            $this->flashMessage($validationErrorMessage);
+        }
+
     }
 
     
