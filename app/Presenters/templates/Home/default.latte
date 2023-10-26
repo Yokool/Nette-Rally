@@ -54,6 +54,15 @@
 	<br>
 	<br>
 
+	{foreach $positions as $position}
+		<p>Pozice: {$position->name}</p>
+		<p>Min. počet: {$position->min_allowed}</p>
+		<p>Max. počet: {$position->max_allowed}</p>
+		<select n:name="position_{$position->id}" multiple>
+		</select>
+		<hr>
+	{/foreach}
+
 	<input n:name=add_team value="Vytvořit tým" />
 	
 </form>

@@ -23,7 +23,10 @@ final class HomePresenter extends Nette\Application\UI\Presenter
     public function renderDefault()
     {
         $members = $this->memberModel->fetchAllMembers();
+        $positions = $this->teamPositionModel->fetchAllPositions();
+
         $this->template->members = $members;
+        $this->template->positions = $positions;
     }
 
     public function createComponentMemberAddForm(): Form
@@ -56,6 +59,23 @@ final class HomePresenter extends Nette\Application\UI\Presenter
         $form = new Form;
         $form->addText('team_name')->setRequired('Prosím vyplňte jméno týmu.');
         
+
+        // Add all possible positions into the form
+        $allPositions = $this->teamPositionModel->fetchAllPositions();
+        
+        foreach ($allPositions as $position) {
+            $position_id = $position->id;
+            $position_name = $position->name;
+
+            $allElligibleMembers = $this->memberModel->fetchAllMembersByPositionIdNamePairs($position_id);
+            
+            $form->addMultiSelect(
+                "position_" . $position_id,
+                $position_name,
+                $allElligibleMembers
+            );
+        }
+
         $form->addSubmit('add_team');
         $form->onSuccess[] = [$this, 'teamAddFormSucceeded'];
         return $form;
@@ -63,7 +83,6 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 
     public function teamAddFormSucceeded(Form $form, $data)
     {
-        bdump("yeah");
         $this->redirectPermanent("Home:");
     }
 

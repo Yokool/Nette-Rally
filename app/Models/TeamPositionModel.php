@@ -16,11 +16,23 @@ final class TeamPositionModel
         
     }
 
-    public function fetchAllPositionsAsIdNamePairs()
+    public function fetchAllPositions()
     {
-        $fetchedPositions = $this->databaseExplorer
+        return $this->databaseExplorer
             ->table('team_position')
             ->fetchAll();
+    }
+
+    /**
+     * Fetches all the positions in the format
+     * of
+     * ID => NAME
+     * Useful when you want to use the positions
+     * in a select list.
+     */
+    public function fetchAllPositionsAsIdNamePairs()
+    {
+        $fetchedPositions = $this->fetchAllPositions();
 
         $idNamePairs = [];
 

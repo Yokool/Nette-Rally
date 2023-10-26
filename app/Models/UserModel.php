@@ -16,11 +16,26 @@ final class UserModel
         
     }
 
-    public function fetchAllMembersByPosition($position_name)
+    public function fetchAllMembersByPositionId($position_id)
     {
         return $this->databaseExplorer->table('team_member')
-            ->where('team_position.name', $position_name)
+            ->where('team_position_fk', $position_id)
             ->fetchAll();
+    }
+
+    public function fetchAllMembersByPositionIdNamePairs($position_id)
+    {
+        $allMembers = $this->fetchAllMembersByPositionId($position_id);
+        $transformedMembers = [];
+
+        foreach ($allMembers as $member) {
+            $member_id = $member->id;
+            $member_name = $member->first_name . " " . $member->last_name;
+
+            $transformedMembers[$member_id] = $member_name;
+        }
+
+        return $transformedMembers;
     }
 
     public function insertNewMember(
