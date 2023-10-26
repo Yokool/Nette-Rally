@@ -132,7 +132,7 @@ final class HomePresenter extends Nette\Application\UI\Presenter
         $areValid = TeamPositionModel::arePositionCountersAllValid($positionCounterArray);
 
         // Complete validation succeess
-        if(true || $areValid['validationResult'])
+        if($areValid['validationResult'])
         {
             $this->onTeamFormValidationSuccess(
                 $team_name,

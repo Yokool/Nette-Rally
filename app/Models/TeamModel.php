@@ -26,12 +26,19 @@ final class TeamModel
         
         $createdTeamID = $createdTeam['id'];
         
-        /*
+        $this->linkMembersToTeam($createdTeamID, $memberIDList);
+    }
+
+    public function linkMembersToTeam($teamID, $memberIDList)
+    {
+        $decompositionTable = $this->databaseExplorer->table('team_member__team');
         foreach ($memberIDList as $memberID)
         {
-            $this->userModel->assignMemberToTeam($memberID, $createdTeamID);
+            $decompositionTable->insert([
+                'team_member_fk' => $memberID,
+                'team_fk' => $teamID,
+            ]);
         }
-        */
     }
     
 }
