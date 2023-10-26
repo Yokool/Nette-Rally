@@ -83,5 +83,15 @@ final class UserModel
         return $transformedMembers;
 
     }
+
+    public function assignMemberToTeam($member_id, $team_id)
+    {
+        $this->databaseExplorer
+            ->table('team_member')
+            ->where('id', $member_id)
+            ->update([
+                'team_fk' => $team_id
+            ]);
+    }
     
 }

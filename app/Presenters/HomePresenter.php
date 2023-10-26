@@ -11,12 +11,18 @@ use App\Models\TeamPositionModel;
 
 final class HomePresenter extends Nette\Application\UI\Presenter
 {
+    const POSITION_FORM_PREFIX = "position_";
+
+    private $allPositions;
 
     public function __construct(
         private UserModel $memberModel,
         private TeamPositionModel $teamPositionModel
     ) {
 
+        // Add all possible positions into the form
+        $this->allPositions = $this->teamPositionModel->fetchAllPositions();
+        
     }
 
 
@@ -60,17 +66,14 @@ final class HomePresenter extends Nette\Application\UI\Presenter
         $form->addText('team_name')->setRequired('Prosím vyplňte jméno týmu.');
         
 
-        // Add all possible positions into the form
-        $allPositions = $this->teamPositionModel->fetchAllPositions();
-        
-        foreach ($allPositions as $position) {
+        foreach ($this->allPositions as $position) {
             $position_id = $position->id;
             $position_name = $position->name;
 
             $allElligibleMembers = $this->memberModel->fetchAllMembersByPositionIdNamePairs($position_id);
             
             $form->addMultiSelect(
-                "position_" . $position_id,
+                self::POSITION_FORM_PREFIX . $position_id,
                 $position_name,
                 $allElligibleMembers
             );
@@ -86,7 +89,18 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 
         $team_name = $data['team_name'];
         
-        bdump($data);
+        // iterate over all positions and their data
+        foreach ($this->allPositions as $position) {
+            $position_id = position->id;
+            $key = self::POSITION_FORM_PREFIX . $position_id;
+            
+            // Get the IDs of all members that were
+            // assigned to this position.
+            $memberIdArray = $data[$key];
+
+            // TODO: PERFORM SOME VALIDATION SO THAT
+            // WE TRACK ALL THE POSITIONS
+        }
 
         $this->redirectPermanent("Home:");
     }
