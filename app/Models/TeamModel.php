@@ -55,11 +55,17 @@ final class TeamModel
         {
             $teamArray = $team->toArray();
             $teamArray['members'] = [];
-            // Get the team member
-            foreach ($team->related('team_member') as $teamMember)
+            // Get the decomposition table for all team member
+            foreach ($team->related('team_member__team') as $decompositionTable)
             {
+                // Get reference for team member
+                $teamMember = $decompositionTable->ref('team_member', 'team_member_fk');
                 
-                $memberPosition = $teamMember->ref('team_position', 'id')['name'];
+                // Get the position of the member associated with this team   
+                $memberPosition = $teamMember->ref('team_position', 'team_position_fk')->toArray()['name'];
+
+                // Add the member under into the team under
+                // his position.
                 $teamArray['members'][$memberPosition][] = $teamMember->toArray();
             }    
 
