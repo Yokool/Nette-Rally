@@ -64,9 +64,6 @@ final class UserModel
         
     }
 
-    /**
-     * REWRITE THIS USING SQL
-     */
     public function transformMembersToOuputForm($fetchedMembers)
     {
         $transformedMembers = [];
